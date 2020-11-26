@@ -16,4 +16,4 @@ Todo el material de este repositorio es libre, conforme a la licencia
 texto completo de la licencia está disponible en
 [https://creativecommons.org/licenses/by-sa/4.0/legalcode.es](https://creativecommons.org/licenses/by-sa/4.0/legalcode.es).
 
-![cc-by-sa logo](https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-sa.png)
+![cc-by-sa logo](https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-sa.svg)
