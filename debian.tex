@@ -1,0 +1,150 @@
+\documentclass{beamer}
+\include{cabecera-focus}
+
+\usepackage{svg}
+
+\author{Alberto Molina Coballes}
+\title{\centering{\includegraphics[width=2cm]{openlogo-debian.png}}}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame} \frametitle{El proyecto Debian}
+  \begin{block}{El proyecto}
+    A diferencia de otras distribuciones, Debian es un proyecto de
+    software libre sostenido por una comunidad
+  \end{block}
+  \begin{block}{Contrato Social}
+    \begin{itemize}
+    \item Debian permanecerá 100\% libre
+    \item Contribuiremos a la comunidad de software libre
+    \item No ocultaremos los problemas
+    \item Nuestra prioridad son nuestros usuarios y el software libre
+    \item Trabajos que no siguen nuestros estándares de software libre
+      (contrib y non-free)
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}\frametitle{Características principales}
+  \begin{itemize}
+  \item Es una de las grandes distribuciones
+  \item Muchas otras distros derivan de Debian
+  \item Modelo de desarrollo completamente abierto
+  \item Formato de paquete \texttt{.deb}
+  \item Publicación regular de versiones estables (2 años aprox.)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Ramas}
+  \begin{block}{\textit{stable}}
+    Versión estable y recomendada para entornos en producción. \textbf{buster}
+  \end{block}
+  \begin{block}{\textit{testing}}
+    Versión en desarrollo y futura estable. \textbf{bullseye}
+  \end{block}
+  \begin{block}{\textit{unstable}}
+    Versión inestable, donde se suben las nuevas versiones que luego pasan a testing. \textbf{sid}
+  \end{block}
+  \begin{block}{\textit{experimental}}
+    Versión para nuevos paquetes o versiones que introducen cambios.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Formato paquete binario \texttt{deb}}
+  \begin{block}{Archivo ar}
+    \begin{itemize}
+    \item debian-binary (Versión, actualmente 2.0)
+    \item control.tar.xz (Metadatos y scripts de mantenimiento)
+    \item data.tar.xz (Contenido)
+    \end{itemize}
+  \end{block}
+  \begin{itemize}
+  \item Los paquetes están firmados por el mantenedor con una clave
+    GPG que está en debian-keyring
+  \item Los paquetes de una rama deben usar la misma versión de una
+    dependencia
+  \end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Ciclo de desarrollo}
+  \begin{block}{Desarrollo}
+  El desarrollo en debian es abierto y cualquiera puede participar
+  \end{block}  
+\begin{itemize}
+\item Forja: Principalmente \url{https://salsa.debian.org}
+\item Info del paquete: \url{https://tracker.debian.org}
+\item Errores y sugerencias: \url{https://bugs.debian.org}
+\item Listas de correo: \url{https://lists.debian.org}
+\item IRC: \url{https://irc.debian.org}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Versiones publicadas de debian}
+\resizebox{.9\textwidth}{!}{%
+  \begin{tabular}{cccccc}
+    \hline
+    Versión&Nombre&Lanzamiento&Arquitecturas&Paquetes&Soporte\\
+    \hline
+    \hline
+    1.1&Buzz&17/6/1996&1&474&1996\\
+    1.2&Rex&12/12/1996&1&848&1996\\
+    1.3&Bo&2/6/1997&1&974&1997\\
+    2.0&Hamm&24/7/1998&2&$\sim 1500$&1998\\
+    2.1&Slink&9/3/1999&4&$\sim 2250$&2000-02\\
+    2.2&Potato&15/8/2000&6&$\sim 3900$&2003-04\\
+    3.0&Woody&19/7/2002&11&$\sim 8500$&2006-08\\
+    3.1&Sarge&6/6/2005&11&$\sim 15400$&2008-10\\
+    4&Etch&8/4/2007&11&$\sim 18000$&2010-12\\
+    5&Lenny&14/2/2009&12&$\sim 23000$&2012-02\\
+    6&Squeeze&6/2/2011&9+2&$\sim 29000$&2016\\
+    7&Wheezy&4/5/2013&11+2&$\sim 36000$&2018\\
+    8&Jessie&25/4/2015&10&$\sim 43000$&30/6/2020\\
+    9&Stretch&17/6/2017&10&$\sim 51687$&6/2022\\
+    10&Buster&6/7/2019&10&> 59000&2024\\
+    \hline
+    \hline
+  \end{tabular}
+}
+\footnotesize{\url{https://en.wikipedia.org/wiki/Debian}}
+\end{frame}
+\begin{frame}
+  \frametitle{Manejo de paquetes}
+  \begin{itemize}
+  \item El manejo de paquetes se realiza a bajo nivel con
+    \texttt{dpkg}
+  \item Por encima de dpkg funciona el sistema APT (\textit{Advanced
+      Packaging Tool}), interfaz única para la descarga y gestión de
+    versiones y dependencias
+  \item Diferentes programas pueden manejar APT: \texttt{apt-get,
+      apt-cache, apt, aptitude, synaptic,} \ldots
+  \item Es imprescindible dominar el manejo de \texttt{dpkg} y APT
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Repositorios (\texttt{/etc/apt/sources.list})}
+  \begin{block}{Rama \texttt{stable} con componente main}
+    deb http://deb.debian.org/debian buster main
+  \end{block}
+  \begin{block}{Actualizaciones de seguridad de \texttt{stable}}
+    deb http://deb.debian.org/debian-security buster/updates main
+  \end{block}
+  \begin{block}{Paquetes que necesitan modificarse frecuentemente}
+    deb http://deb.debian.org/debian buster-updates main  
+  \end{block}
+  \begin{block}{Paquetes disponibles en \texttt{stable} con versión de
+      \texttt{testing}}
+    deb http://deb.debian.org/debian buster-backports main  
+  \end{block}
+  Además de \texttt{main}, existen \texttt{contrib} y \texttt{non-free}
+\end{frame}
+\end{document}

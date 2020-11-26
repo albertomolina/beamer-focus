@@ -1,0 +1,180 @@
+\documentclass{beamer}
+\include{cabecera-focus}
+
+\author{Alberto Molina Coballes}
+\title{El kérnel linux}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame} \frametitle{El kérnel linux}
+  \begin{itemize}
+  \item Características principales
+  \item Características de la compilación
+  \item Carga del sistema
+  \item Manejo de módulos
+  \item Compilación de módulos
+  \item Compilación del kérnel
+  \end{itemize}  
+\end{frame}
+
+\begin{frame} \frametitle{Características principales}
+  \begin{itemize}
+  \item Kérnel del sistema GNU/Linux, licenciado bajo la GNU GPL
+  \item Desarrollo colaborativo de miles de personas
+  \item Monolítico
+  \item LKM: Loadable kernel module
+  \item Última versión estable: 5.9.1 (17/10/2020)
+  \item \url{kernel.org}
+  \item Portado a gran cantidad de arquitecturas, desde pequeños
+    dispositivos a grandes supercomputadoras.
+  \end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Características de la compilación}
+  \begin{itemize}
+  \item El código fuente de rama \textit{vanilla} del núcleo ocupa actualmente 1.1GiB 
+  \item Los componentes del kérnel se compilan de dos formas:
+    \begin{itemize}
+    \item Se incluyen dentro de un fichero ejecutable enlazado
+      estáticamente y que habitualmente se denomina \texttt{vmlinuz} o
+      \texttt{zImage}
+    \item Se compilan individualmente en ficheros objetos con
+      extensión \texttt{.ko} que se cargan en memoria a demanda
+      (están ubicados en \texttt{/lib/modules})
+    \end{itemize}
+  \item Soluciones para hardware no detectado en el arranque:
+    \begin{itemize}
+    \item Se aumenta el tamaño del fichero ejecutable (\texttt{bzImage})
+    \item Se montan temporalmente algunos módulos en memoria (\textit{initramfs})
+    \end{itemize}
+  \item Distribuciones de uso general en sistemas x86 (x86\_64):
+    \begin{itemize}
+    \item Enorme variedad de hardware
+    \item Se incluyen gran cantidad de módulos
+    \end{itemize}
+  \item Es posible compilar un kérnel para un hardware determinado y
+    reducir mucho su tamaño.
+  \end{itemize}
+\end{frame}
+
+% \begin{frame} \frametitle{Carga del sistema - I}
+%   \begin{itemize}
+%   \item Se inicia el sistema cargando la BIOS (EFI \ldots WTF?)
+%   \item Se realiza la secuencia POST (\textit{Power-On Self-Test})
+%   \item Se lee el MBR del disco duro donde está la información de las
+%     particiones del disco y el gestor de arranque (normalmente GRUB).
+%   \item Se carga en memoria el fichero ejecutable comprimido \texttt{vmlinuz-\ldots}
+%   \item Se monta el initramfs (fichero \texttt{initrd-\ldots})
+%     $\leftarrow$ opcional
+%   \item Se comprueba la memoria, tipo de placa y CPU(s)
+%   \item Se activa el sistema Plug and Play
+%   \item Se inicializan los dispositivos virtuales (LVM y RAID)
+%   \item Se libera la memoria ocupada por el initramfs
+%   \item Se ejecuta el proceso \texttt{init} con PID=1
+%   \item Se ejecutan los scripts de \texttt{/etc/rcS.d} $\leftarrow$
+%     depende de la distro
+%   \end{itemize}
+%   \tiny{Principales pasos en el arranque de un sistema GNU/Linux instalado en
+%     un disco duro de un equipo x86}
+% \end{frame}
+% \begin{frame} \frametitle{Carga del sistema - II}
+%   \begin{itemize}
+%   \item Se establece el nombre del equipo (\texttt{hostname})
+%   \item Se monta VFS
+%   \item Se inicia udevd, que puebla \texttt{/dev} y carga los módulos necesarios
+%   \item Se chequea el sistema de ficheros raíz
+%   \item Se procesa el fichero \texttt{/etc/modules}
+%   \item Se chequean todos los sistemas de ficheros
+%   \item Se cargan los parámetros del kérnel especificados en \texttt{/etc/sysctl.conf}
+%   \item Se montan todos los sistemas de ficheros
+%   \item Se limpian los ficheros temporales \texttt{/tmp},
+%     \texttt{/var/run} y \texttt{/var/lock}
+%   \item Se levantan las interfaces de red
+%   \item Se ejecutan en orden los scripts del resto de niveles de ejecución
+%   \end{itemize}
+% \end{frame}
+
+\begin{frame} \frametitle{Manejo de módulos}
+  La mayoría de los módulos se cargan automáticamente cuando es
+  necesario, pero es posible cargarlos o descargarlos manualmente:\par
+\vspace{1cm}
+  \begin{itemize}
+  \item \texttt{lsmod}: Módulos cargados
+  \item \texttt{modprobe 'módulo' }: Carga el módulo en memoria
+  \item \texttt{modprobe -r 'módulo' }: Descarga el módulo de la memoria
+  \item \texttt{find /lib/modules/`uname -r` -type f -iname '*.ko' }: Módulos disponibles
+  \item \texttt{modinfo 'módulo' }: Información del módulo
+  \item \texttt{depmod}: Actualiza las dependencias de los módulos 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Parámetros del kérnel}
+  \begin{itemize}
+  \item Algunos módulos incluyen parámetros que podemos obtener con
+    \texttt{modinfo -p <modulo>}
+  \item Hay parámetros del kernel que usan valores por defecto salvo
+    que los especifiquemos
+  \item Parámetros de módulos:
+    \begin{itemize}
+    \item Directamente en el gestor de arranque
+    \item En el fichero /etc/modprobe.d/<modulo>.conf
+    \end{itemize}
+  \item Parámetros del kérnel
+    \begin{itemize}
+    \item Directamente sobre /proc/sys
+    \item Mediante \texttt{sysctl}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim]\frametitle{Compilación de módulos (Debian)}
+En algunas ocasiones es necesario compilar un módulo, normalmente
+algún controlador de dispositivo que no se encuentra soportado en la
+rama oficial del kérnel.
+\begin{itemize}
+\item Instalamos los paquetes necesarios para compilar:
+\begin{verbatim}
+# aptitude install build-essential
+\end{verbatim}
+\item Instalamos los ficheros de cabeceras del kérnel actual:
+\begin{verbatim}
+# aptitude install linux-headers-`uname -r`
+\end{verbatim}
+\item Si existe un paquete Debian con el módulo sin
+  compilar (ndiswrapper, fuse, madwifi, \ldots) $\Rightarrow$
+  Utilizar \texttt{module-assistant}
+\item En el resto de casos, se descomprime el paquete que incluye los
+  ficheros fuentes del módulo en \texttt{/usr/src} y se siguen las
+  instrucciones del fichero \texttt{README} que debe incluir.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DKMS}
+  \begin{itemize}
+  \item \textit{Dynamic Kernel Module Support}
+  \item Compila módulos que están fuera de la rama principal del kérnel
+  \item Normalmente se utiliza con módulos que tienen liciencias no
+    compatibles con GPL o directamente que no son libres
+  \item Debian proporciona varios paquetes listos para usar con DKMS
+  \item Recompila los módulos cada vez que se instala un nuevo núcleo
+  \end{itemize}
+\end{frame}
+
+\begin{frame} \frametitle{Compilación del kérnel (Debian)}
+Es poco habitual tener que compilar un núcleo completo, puede ser
+necesario cuando se utiliza hardware muy peculiar o como en este caso
+simplemente con fines educativos.\par
+\end{frame}
+
+\end{document}

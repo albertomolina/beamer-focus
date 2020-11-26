@@ -1,0 +1,143 @@
+\documentclass{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}
+
+\parskip=12pt
+
+\author{Alberto Molina Coballes}
+\title{\emph{Red Hat y derivadas}}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Índice}
+  \begin{itemize}
+  \item Red Hat
+  \item Distribuciones derivadas
+  \item Principales diferencias con Debian
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Red Hat. Principales hitos.}
+  \begin{itemize}
+  \item Red Hat Inc. Creada en 1993/1994 (Bob Young y Marc Erwing)
+  \item 1994: Se publica Red Hat Linux (RHL)
+  \item 1999: \href{https://es.finance.yahoo.com/echarts?s=RHT}{Sale a bolsa}
+  \item 2003: Se abandona RHL y surge RHEL
+  \item 2003: Aparece Fedora (comunidad apoyada por RH)
+  \item 2004: Aparece CentOS (proyecto independiente)
+  \item 2014: Red Hat acuerda apoyar a CentOS
+  \item 2019: IBM anuncia la compra Red Hat en octubre de 2018 por 34.000 millones de \$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Red Hat. Modelo de negocio}
+  \begin{itemize}
+  \item Inicialmente software Unix y Linux
+  \item Se centra en soluciones de software libre
+  \item Siempre utilizando el término ``open source''
+  \item Ofrece soporte, consultoría, formación y certificación en sus tecnologías
+  \item Una de las empresas que más contribuye en proyectos de software libre
+  \item Trabaja típicamente con grandes clientes
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Red Hat. Principales adquisiciones}
+  \begin{description}
+  \item[2000] Cygnus
+  \item[2003] Sistina (GFS, LVM, DM)
+  \item[2006] JBoss
+  \item[2008] Qumranet (KVM, SPICE)
+  \item[2011] Gluster
+  \item[2012] ManageIQ
+  \item[2014] Inktank (Ceph)
+  \item[2014] e-Novance (OpenStack)
+  \item[2015] Ansible
+  \item[2018] CoreOS
+  \end{description}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Red Hat. Principales productos}
+  \begin{itemize}
+  \item Sistemas: RHEL, Satellite
+  \item Virtualización, Hiperconvergencia
+  \item Cloud: OpenStack, OpenShift
+  \item Middleware: JBoss
+  \item Almacenamiento: Ceph y Gluster
+  \item Automatización: Ansible
+  \end{itemize}
+  \href{https://www.redhat.com/es/technologies/all-products}{www.redhat.com/es/technologies/all-products}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Versiones de RHEL}
+  \begin{center}
+    \begin{tabular}{lll}
+      \hline
+      \hline
+      Años&Versión&Núcleo\\
+      \hline
+      2002-2005& 2.1 (1-7)& 2.4.9\\
+      2003-2007&3 (1-9)&2.4.21\\
+      2005-2011&4 (1-9)&2.6.9\\
+      2007-2014&5 (1-11)&2.6.18\\
+      2010-&6 (1-10-\ldots)&2.6.32\\
+      2014-&7 (1-7-\ldots)&3.10\\
+      2019-&8 &4.18\\
+      \hline
+      \hline
+    \end{tabular}
+  \end{center}
+  \url{https://access.redhat.com/articles/3078}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fedora}
+  \begin{itemize}
+  \item Principal producto del ``Fedora Project''
+  \item Comunidad soportada por Red Hat
+  \item Se publica cada 6 meses (aproximadamente) y se soporta durante 13 meses más.
+  \item No existe versión LTS
+  \item Incluye software más actualizado que RHEL o CentOS
+  \item Última versión estable (Oct 2020): Fedora 33
+  \item Fedora Silverblue
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Principales diferencias técnicas con Debian}
+  \begin{itemize}
+  \item Paquetes rpm en lugar de deb
+  \item Gestión de paquetes con rpm en lugar de dpkg
+  \item Gestión de repositorios con \sout{yum} dnf en lugar de apt
+  \item Repositorios oficiales con muchos menos paquetes
+  \item Soporte de hasta 10 años
+  \item Sólo son accesibles los paquetes de las versiones estables
+  \item Utiliza anaconda en lugar de debian-installer
+  \item SELinux activado por defecto
+  \item Utlización de firewalld 
+  \item Directorio /etc/sysconfig
+  \end{itemize}
+\end{frame}
+
+\end{document}
