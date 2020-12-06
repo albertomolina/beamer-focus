@@ -1,0 +1,188 @@
+\documentclass{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+% \usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\small,
+aboveskip=5pt,
+basicstyle=\tiny\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{\emph{cloud-init}}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Configuración de una instancia}
+  \begin{itemize}
+  \item La creación de un servidor en IaaS (instancia) es un proceso
+    peculiar, que requiere un tratamiento específico.
+  \item Se parte de una imagen mínima, sin contraseña establecida y
+    con una configuración totalmente genérica.
+  \item Imprescindible la configuración inicial:
+    \begin{itemize}
+    \item Generación de la clave ssh de la instancia
+    \item Parámetros de red, hostname, etc.
+    \item Autenticación del usuario (clave ssh)
+    \end{itemize}
+  \item Configuración no esencial
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{El proyecto cloud-init}
+  \begin{itemize}
+  \item cloud-init: cloud instance initialization
+  \item Estándar de facto en nube pública o privada
+  \item Desarrollado en python
+  \item Proyecto liderado por Canonical
+  \item Paquete \texttt{cloud-init} instalado habitualmente en las
+    imágenes para IaaS
+  \item Documentación: \url{https://cloudinit.readthedocs.io}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Datos para la instancia}
+  Una instancia que se inicia o reinicia, puede obtener diferentes tipos de datos, en función del origen de estos:
+  \begin{itemize}
+  \item Metadatos: Obtenidos del servidor de metadatos del proveedor de nube (típicamente a través de dirección de enlace local \url{http://169.254.169.254}). Incluye las características propias de la instancia: nombre, configuración de red, tamaño de los discos, etc.
+  \item Datos de usuario (opcional): Datos adicionales de configuración que proporciona el usuario de la instancia (\textit{user-data})
+  \item Datos del proveedor (opcional): Datos adicionales de configuración proporcionados por el proveedor (\textit{vendor-data})
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Etapas}
+  \begin{enumerate}
+  \item Generator
+  \item Local
+  \item Network
+  \item Config
+  \item Final
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Generator}
+  \begin{itemize}
+  \item Un generador de systemd activará cloud-init, salvo que:
+    \begin{itemize}
+    \item Exista el fichero \texttt{/etc/cloud/cloud-init.disabled}
+    \item Se use en el arranque la opción de kérnel \texttt{cloud-init=disabled}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Local}
+  \begin{itemize}
+  \item Asociada al servicio \texttt{cloud-init-local.service}
+  \item Obtiene la información de la configuración de red:
+  \end{itemize}
+  \begin{lstlisting}
++--------+------+------------------------------+---------------+--------+--------------+
+| Device |  Up  |           Address            |      Mask     | Scope  | Hw-Address   |
++--------+------+------------------------------+---------------+--------+--------------+
+|  eth0  | True |          10.0.0.10           | 255.255.255.0 | global | fa:16:3e:... |
+|  eth0  | True | fe80::f816:3eff:fe4f:391a/64 |       .       |  link  | fa:16:3e:... |
+|   lo   | True |          127.0.0.1           |   255.0.0.0   |  host  |         .    |
+|   lo   | True |           ::1/128            |       .       |  host  |         .    |
++--------+------+------------------------------+---------------+--------+--------------+
+\end{lstlisting}
+\begin{itemize}
+\item Si no se obtiene configuración de la red, se hace una petición DHCP
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Network}
+  \begin{itemize}
+  \item Asociada al servicio \texttt{cloud-init.service}
+  \item Se ejecuta después de que esté configurada la red:
+    \begin{itemize}
+    \item Redimensión de la partición raíz
+    \item Montaje
+    \item Generación de números aleatorios
+    \item hostname
+    \item Generación de las claves ssh del servidor
+    \item ...
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Config}
+  \begin{itemize}
+  \item Asociada al servicio \texttt{cloud-config.service}
+  \item Configuración ntp
+  \item Configuración zona horaria
+  \item Configuración de apt/dpkg ...
+  \item Configuración de contraseñas, claves ssh
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Final}
+  \begin{itemize}
+  \item Asociada al servicio \texttt{cloud-final.service}
+  \item Actualización de los paquetes instalados (update/upgrade)
+  \item Ejecución de los datos de proveedor (\textit{vendor-data})
+  \item Ejecución de scripts de usuario
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Configuración de cloud-init}
+  \begin{itemize}
+  \item La utilización de metadatos depende principalmente del proveedor de nube
+  \item El usuario utiliza cloud-init principalmente de dos formas:
+    \begin{itemize}
+    \item Mediante \textit{user-data}
+    \item Modificando el contenido \texttt{/etc/cloud/}. Más apropiado
+      para la configuración de la imagen.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{user-data: cloud-config}
+  Hay varios formatos aceptados para introducir ``user-data'', el más
+  habitual es mediante el formato YAML conocido como cloud-config.
+  \begin{itemize}
+  \item
+    \url{https://cloudinit.readthedocs.io/en/latest/topics/examples.html}
+  \item \url{https://cloudinit.readthedocs.io/en/latest/topics/modules.html}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Comprobaciones}
+  Se puede usar la instrucción \texttt{cloud-init} para realizar comprobaciones:
+  \begin{lstlisting}
+    cloud-init query -l
+    cloud-init init
+    cloud-init analyze show
+  \end{lstlisting}
+\end{frame}
+\end{document}
