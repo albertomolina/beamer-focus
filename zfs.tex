@@ -1,0 +1,85 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{ZFS}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{El proyecto ZFS}
+  \begin{itemize}
+  \item 2001: Comienza el desarrollo en Sun Microsystems para Solaris
+  \item 2005: Se libera con licencia CDDL y se incluye en
+    OpenSolaris. CDDL es incompatible con GPL: ZFS no puede incluirse
+    en el kérnel linux
+  \item 2006: Se desarrolla ZFS sobre FUSE para sistemas linux
+  \item 2010: Oracle compra Sun Microsystems y abandona
+    OpenSolaris. ZFS vuelve a ser software cerrado
+  \item 2010: Se crea Illumos, fork libre de OpenSolaris
+  \item 2013: Se anuncia
+    \href{http://open-zfs.org/wiki/Main_Page}{OpenZFS} como fork libre
+    de ZFS
+  \item 2015: Aparece \href{https://zfsonlinux.org/}{ZFS on Linux},
+    versión de OpenZFS para linux
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Características de \sout{ZFS} OpenZFS}
+  \begin{itemize}
+  \item Es un sistema completo de almacenamiento que no requiere
+    otras herramientas
+  \item Gestiona los dispositivos de bloques directamente
+  \item Incluye su propia implementación de RAID
+  \item CoW, deduplicación, instantáneas, compresión, cifrado, soporte
+    nativo de nfs, cifs o iscsi, \ldots
+  \item Siempre consistente sin necesidad de chequeos
+  \item Se autorepara de forma continua
+  \item Muy escalable
+  \item Exigente en recursos
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Instalación en Debian}
+  \begin{itemize}
+  \item \url{https://tracker.debian.org/pkg/zfs-linux}
+  \item Modificación de los repositorios para incluir la rama contrib
+    y el repositorio de backports
+  \item Preparación del sistema para compilar módulos
+  \item Instalación de los módulos del kérnel: \texttt{spl-dkms} y \texttt{zfs-dkms}
+  \item Instalación de las herramientas del espacio de usuario: \texttt{zfsutils-linux}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Demo}
+\end{frame}
+\end{document}
