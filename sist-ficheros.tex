@@ -1,0 +1,227 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\tiny\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Sistemas de Ficheros en Linux}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Fichero}
+  \begin{itemize}
+  \item Es un conjunto de datos almacenados en un dispositivo de
+    almacenamiento
+  \item Un fichero posee un nombre y metadatos
+  \item El tipo de datos contenidos está definido por su formato y en
+    ocasiones por su extensión
+  \item Normalmente el formato está definido en la cabecera
+    (\textit{magic number})
+  \item Un fichero solo con datos ASCII o UTF8 se conoce como texto
+    plano (\textit{plain text})
+  \item Los ficheros con datos reciben el nombre de ficheros regulares
+  \end{itemize}
+  \begin{lstlisting}
+    file fichero.jpg
+    xxd fichero.pdf |head
+\end{lstlisting}
+\small{\url{https://asecuritysite.com//forensics/magic}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ficheros especiales}
+  Aparte de los ficheros regulares, en UNIX ``todo es un fichero'':
+  \begin{itemize}
+  \item Enlaces
+  \item sockets
+  \item Dispositivos (En \texttt{/dev})
+  \item Ficheros virtuales (En \texttt{/proc} o \texttt{/sys})
+  \item Ficheros virtuales en memoria (Tipo tmpfs o ramfs)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Directorios}
+  \begin{itemize}
+  \item Los directorios son contenedores de ficheros y se pueden
+    anidar (subdirectorios)
+  \item El directorio principal es el directorio raíz o /
+  \item Los directorios se organizan formando un árbol a partir del
+    directorio raíz
+  \item Los ficheros se definen de forma única por el nombre que
+    incluye su ruta completa desde el directorio raíz,
+    p.ej. \texttt{/usr/share/doc/apt/copyright}
+  \item La estructura de los directorios es estricta y definida en el
+    Linux Filesystem Hierarchy Standard (FHS) de la Linux Foundation
+  \item Las diferentes distros de GNU/Linux deben seguir la FHS
+  \end{itemize}
+\small{\url{https://refspecs.linuxfoundation.org/fhs.shtml}}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Ejemplos de ficheros}
+  \begin{lstlisting}
+stat sist-ficheros.pdf 
+  File: sist-ficheros.pdf
+  Size: 135886    	Blocks: 272        IO Block: 4096   regular file
+Device: fd02h/64770d	Inode: 68450572    Links: 1
+Access: (0644/-rw-r--r--)  Uid: ( 1000/ alberto)   Gid: ( 1000/ alberto)
+Access: 2019-12-17 17:28:46.430874348 +0100
+Modify: 2019-12-17 20:04:19.925574364 +0100
+Change: 2019-12-17 20:04:19.925574364 +0100
+ Birth: -
+
+stat /etc/
+  File: /etc/
+  Size: 12288     	Blocks: 32         IO Block: 4096   directory
+Device: fd00h/64768d	Inode: 33554560    Links: 167
+Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2015-11-07 21:24:49.164146678 +0100
+Modify: 2019-12-17 16:55:39.973704262 +0100
+Change: 2019-12-17 16:55:39.973704262 +0100
+ Birth: -
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sistemas de ficheros}
+  \begin{itemize}
+  \item Controla cómo se almacenan y obtienen los datos
+  \item Capa lógica
+    \begin{itemize}
+    \item Responsable de la interacción con los usuarios y programas
+    \item API
+    \item Modelo de seguridad
+    \end{itemize}
+  \item Implementación: Enlaza la capa lógica con los dispositivos de
+    almacenamiento
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dispositivos de bloques}
+  \begin{itemize}
+    \item Los dispositivos son ficheros especiales ubicados en
+      \texttt{/dev}
+    \item Dispositivos de caracteres (\textit{character devices})
+    \item Dispositivos de bloques (\textit{block devices})
+      \begin{itemize}
+      \item E/S en bloques de datos
+      \item Uso de buffer
+      \item Usados para los dispositivos de almacenamiento
+      \end{itemize}
+    \item Discos duros, disquetes, CDs, DVDs, particiones, volúmenes
+      lógicos, RAID, etc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Linux Virtual FileSystem (VFS)}
+  \begin{itemize}
+  \item Capa del kérnel que proporciona una interfaz única a usuarios
+    y programas
+  \item Implementa un único árbol aunque esté formado por varios
+    dispositivos de bloques y/o tipos de sistemas de ficheros
+  \item syscalls: open(2), stat(2), read(2), write(2) y chmod(2)
+  \item Montar y desmontar
+  \item Elementos principales de cada tipo de sistema de ficheros:
+    \begin{itemize}
+    \item Superbloque
+    \item Inodos
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DAS, NAS y SAN}
+  \begin{itemize}
+  \item \textit{Direct Attached Storage} (DAS)
+  \item \textit{Network Attached Storage} (NAS)
+  \item \textit{Storage Area Network} (SAN)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sistemas de ficheros para DAS}
+  \begin{itemize}
+  \item ext2/3/4
+  \item xfs
+  \item jfs
+  \item reiserfs
+  \item vfat
+  \item zfs
+  \item btrfs
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{ext4}
+  \begin{itemize}
+  \item Sistema de ficheros por defecto en linux
+  \item Características principales:
+    \begin{itemize}
+    \item Compatible con ext2/3
+    \item Utiliza \textit{journaling}
+    \item Hasta 1 EiB con ficheros de 16 TiB
+    \item Mejoras en el rendimiento frente a ext2/3
+    \item Herramientas del espacio de usuario: \texttt{e2fsprogs}:
+      \texttt{mkfs.ext4 fsck.ext4 tune2fs resize2fs dumpe2fs debugfs ...}
+    \end{itemize}
+  \item No supone una mejora radical frente a ext3
+  \end{itemize}
+  \small{\url{https://www.slashroot.in/understanding-file-system-superblock-linux}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{xfs}
+  \begin{itemize}
+  \item Desarrollado originalmente por SGI
+  \item Utilizado por defecto en RHEL 7
+  \item Hasta 8 EiB
+  \item Utiliza \textit{journaling}
+  \item Permite redimensionado en ``caliente''
+  \item Presume de tener mejor rendimiento que ext4
+  \item Herramientas del espacio de usuario: \texttt{xfsprogs}:
+     \texttt{mkfs.xfs fsck.xfs xfs\_db xfs\_growfs xfs\_info ...}
+  \end{itemize}
+  \small{\url{https://righteousit.wordpress.com/2018/05/21/xfs-part-1-superblock/}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{vfat}
+  \begin{itemize}
+  \item Sistema de ficheros de MS-DOS/Windows
+  \item No guarda información de propietarios: sistema monousuario
+  \item Enormes limitaciones
+  \item Utilizado masivamente en dispositivos extraíbles
+  \item VFS permite su utilización ``transparente'' en linux
+  \item Herramientas del espacio de usuario: \texttt{dosfstools}:
+    \texttt{mkfs.vfat fsck.vfat dosfslabel}
+  \end{itemize}
+\end{frame}
+\end{document}
