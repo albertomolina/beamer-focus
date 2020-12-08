@@ -1,0 +1,80 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{iSCSI}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{iSCSI}
+  \begin{itemize}
+  \item Proporciona acceso a dispositivos de bloques sobre TCP/IP
+  \item Se utiliza fundamentalmente en redes de almacenamiento
+  \item Alternativa económica a Fibre Channel
+  \item Utilizado típicamente en redes de cobre de 1 Gbps o 10 Gbps
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Elementos iSCSI}
+  \begin{itemize}
+  \item Unidad lógica (LUN): Dispositivo de bloques a compartir por el servidor iSCSI
+  \item Target: Recurso a compartir desde el servidor. Un target incluye uno o varios LUN
+  \item Initiator: Cliente iSCSI
+  \item Multipath
+  \item IQN es el formato más extendido para la descripción de los recursos. Ejemplo:
+
+    \texttt{iqn.2020-01.es.tinaja:sdb4}
+  \item iSNS: Protocolo que permite gestionar recursos iSCSI como si fueran Fibre Channel
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Implementaciones iSCSI}
+  \begin{itemize}
+  \item iSCSI tiene soporte en la mayoría de sistemas operativos
+  \item En Linux usamos
+    \href{https://github.com/open-iscsi/open-iscsi}{open-iscsi} como
+    initiator
+  \item Existen varias opciones en Linux para el servidor iSCSI:
+    \begin{itemize}
+    \item \href{http://linux-iscsi.org/wiki/Main_Page}{Linux-IO (LIO)}
+    \item \href{http://stgt.sourceforge.net/}{tgt}
+    \item \href{http://scst.sourceforge.net/}{scst}
+    \item \href{http://www.peach.ne.jp/archives/istgt/}{istgt}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Demo}
+  \small{\url{https://gist.github.com/albertomolina/6c621aee3f80c5e7baf3c111df670cf0}}
+\end{frame}
+\end{document}
