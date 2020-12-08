@@ -1,0 +1,177 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\tiny\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Sistemas de Ficheros en Linux. Funcionalidades avanzadas}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Funcionalidades avanzadas}
+  \begin{itemize}
+  \item \textit{Copy on Write} (CoW)
+  \item Deduplicación
+  \item Cifrado
+  \item Compresión
+  \item Gestión de volúmenes
+  \item Instantáneas (\textit{snapshots})
+  \item Redundancia (RAID)
+  \end{itemize}
+  \small{\url{https://en.wikipedia.org/wiki/Comparison_of_file_systems}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Copy on Write}
+  \begin{itemize}
+  \item Se descomponen los datos a almacenar en diferentes bloques
+  \item Al crear la copia solo se crea un nuevo puntero que apunta al
+    conjunto de datos originales
+  \item Cuando los datos copiados se modifican, se van creando nuevos
+    bloques con las modificaciones
+  \item Las versiones divergen a medida que van cambiando
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Deduplicación}
+  \begin{itemize}
+  \item Utiliza las propiedades CoW de un sistema de ficheros
+  \item Identifica bloques idénticos y los reorganiza con CoW
+  \item Permite aprovechar la funcionalidad CoW sin intervención del
+    usuario
+  \item Ejemplo: En un directorio con las cuentas de correo de todos
+    los usuarios de la organización se guarda solo una copia del
+    fichero adjunto enviado a todas las cuentas
+  \end{itemize}
+  \small{\url{https://strugglers.net/~andy/blog/2017/01/10/xfs-reflinks-and-deduplication/}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cifrado}
+  Permite el cifrado de ficheros al vuelo sin utilizar software adicional
+\end{frame}
+
+\begin{frame}
+  \frametitle{Compresión}
+  Almacena los ficheros comprimidos para optimizar el uso del espacio
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gestión de volúmenes}
+  \begin{itemize}
+  \item Equivalente a LVM
+  \item Permite gestionar volúmenes y sistemas de ficheros de forma
+    independiente de los dispositivos de bloques físicos
+  \item Un dispositivo de bloques físico puede contener varios
+    volúmenes o un volumen puede estar distribuido en varios
+    dispositivos de bloques físicos
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Instantáneas (snapshots)}
+  \begin{itemize}
+  \item Utiliza instantáneas de forma nativa
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Sumas de comprobación (checksums)}
+  Utilizadas para verificar la integridad de los ficheros
+\end{frame}
+
+\begin{frame}
+  \frametitle{Redundancia (RAID)}
+  \begin{itemize}
+  \item RAID software nativo en el sistema de ficheros
+  \item Sin necesidad de usar mdadm
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Comparativa}
+  \begin{center}
+    \begin{tabular}[center]{|l|cccccccc|}
+      \hline
+      &CoW&Dedup&Cifr&Comp&Vols&Snap&cksum&RAID\\
+      \hline
+      \rowcolor[rgb]{1,0.95,0.77}
+      ext4
+      & {\color{red}\ding{55}}
+          & {\color{red}\ding{55}}
+                & {\color{verde}\ding{51}}
+                        & {\color{red}\ding{55}}
+                              & {\color{red}\ding{55}}
+                                   & {\color{red}\ding{55}}
+                                          & {\color{red}\ding{55}}
+                                                   & {\color{red}\ding{55}}\\
+      jfs
+      & {\color{red}\ding{55}}
+          & {\color{red}\ding{55}}
+                & {\color{verde}\ding{51}}
+                        & {\color{red}\ding{55}}
+                              & {\color{red}\ding{55}}
+                                   & {\color{red}\ding{55}}
+                                          & {\color{red}\ding{55}}
+                                                   & {\color{red}\ding{55}}\\
+      \rowcolor[rgb]{1,0.95,0.77}
+      xfs
+      & {\color{verde}\ding{51}}
+          & {\color{verde}\ding{51}}
+                & {\color{red}\ding{55}}
+                        & {\color{red}\ding{55}}
+                              & {\color{red}\ding{55}}
+                                   & {\color{red}\ding{55}}
+                                          & {\color{red}\ding{55}}
+                                                   & {\color{red}\ding{55}}\\
+      zfs
+      & {\color{verde}\ding{51}}
+          & {\color{verde}\ding{51}}
+                & {\color{verde}\ding{51}}
+                        & {\color{verde}\ding{51}}
+                              & {\color{verde}\ding{51}}
+                                   & {\color{verde}\ding{51}}
+                                          & {\color{verde}\ding{51}}
+                                                   & {\color{verde}\ding{51}}\\
+      \rowcolor[rgb]{1,0.95,0.77}
+      btrfs
+      & {\color{verde}\ding{51}}
+          & {\color{verde}\ding{51}}
+                & {\color{red}\ding{55}}
+                        & {\color{verde}\ding{51}}
+                              & {\color{verde}\ding{51}}
+                                   & {\color{verde}\ding{51}}
+                                          & {\color{verde}\ding{51}}
+                                                   & {\color{verde}\ding{51}}\\
+      \hline
+    \end{tabular}
+  \end{center}
+  \small{\url{https://en.wikipedia.org/wiki/Comparison_of_file_systems}}
+\end{frame}
+\end{document}
