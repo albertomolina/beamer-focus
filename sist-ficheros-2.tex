@@ -16,7 +16,8 @@ belowskip=5pt
 }
 
 \author{Alberto Molina Coballes}
-\title{Sistemas de Ficheros en Linux. Funcionalidades avanzadas}
+\title{Sistemas de Ficheros en Linux.\\
+  Características avanzadas}
 \institute{IES Gonzalo Nazareno}
 \titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
 \logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
@@ -33,7 +34,7 @@ belowskip=5pt
 \end{frame}
 
 \begin{frame}
-  \frametitle{Funcionalidades avanzadas}
+  \frametitle{Características avanzadas}
   \begin{itemize}
   \item \textit{Copy on Write} (CoW)
   \item Deduplicación
@@ -63,7 +64,7 @@ belowskip=5pt
   \begin{itemize}
   \item Utiliza las propiedades CoW de un sistema de ficheros
   \item Identifica bloques idénticos y los reorganiza con CoW
-  \item Permite aprovechar la funcionalidad CoW sin intervención del
+  \item Permite aprovechar la característica CoW sin intervención del
     usuario
   \item Ejemplo: En un directorio con las cuentas de correo de todos
     los usuarios de la organización se guarda solo una copia del
@@ -119,7 +120,7 @@ belowskip=5pt
   \begin{center}
     \begin{tabular}[center]{|l|cccccccc|}
       \hline
-      &CoW&Dedup&Cifr&Comp&Vols&Snap&cksum&RAID\\
+      &CoW&Dedup&Cifrado&Compr&Vols&Snapshot&checksum&RAID\\
       \hline
       \rowcolor[rgb]{1,0.95,0.77}
       ext4
