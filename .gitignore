@@ -17,3 +17,5 @@
 *.pre
 *.snm
 *.vrb
+
+limpiar.sh
