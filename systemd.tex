@@ -1,0 +1,296 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}                                                                  
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{systemd}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Orígenes de systemd}
+  \begin{itemize}
+  \item Se plantea como sustituto de System V init (PID=1)
+  \item Para obtener un arranque rápido en paralelo de los servicios en el espacio de usuario
+  \item Comienza su desarrollo en 2010
+  \item Compite inicialmente con upstart que comenzó a desarrollarse en 2006
+  \item Englobado en el proyecto freedesktop.org: \url{https://www.freedesktop.org/wiki/Software/systemd/}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Systemd ganó}
+  \begin{itemize}
+  \item upstart fue inicialmente adoptado por muchas distros
+  \item Debian: \href{https://lists.debian.org/debian-devel/2013/10/msg00651.html}{Proposal: switch init system to systemd or upstart} y \href{https://wiki.debian.org/Debate/initsystem/upstart}{Debate initsystem upstart}
+  \item Adopción de systemd:
+    \begin{itemize}
+    \item Fedora: Mayo 2011
+    \item Arch Linux: Octubre 2012
+    \item RHEL y CentOS: Junio/Julio 2014
+    \item Ubuntu: Abril 2015
+    \item Debian: Abril 2015
+    \end{itemize}
+  \end{itemize}
+  \href{http://www.markshuttleworth.com/archives/1316}{Mark Shuttleworth: Losing graciously}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Funcionalidades iniciales}
+  \begin{itemize}
+  \item Sustituye \texttt{/sbin/init}
+  \item Sustituye los niveles de ejecución (\textit{run-levels})
+  \item Controla los demonios (olvídate de \texttt{/etc/init.d/...} o service)
+  \item Desaparece \texttt{/etc/inittab}
+  \item Sustituye \texttt{/etc/fstab}
+  \item Se encarga de borrar los directorios temporales
+  \item Gestiona los servicios en paralelo
+  \item Gestiona los procesos con cgroups
+  \item Soporta instantáneas y restauración
+  \end{itemize}
+  \url{http://0pointer.de/blog/projects/why.html}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pero ...}
+  Los desarrolladores de systemd pensaron que una vez puestos a sustituir se podría seguir controlando:
+  \begin{itemize}
+  \item Las sesiones de usuario y las TTYs (systemd-logind)
+  \item Syslog (systemd-journald)
+  \item Dispositivos (systemd-udevd)
+  \item Variables del kérnel (systemd-sysctl)
+  \item Sesiones de usuario (systemd-user-sessions)
+  \item Puntos de montaje (*.mount)
+  \item Control de eventos como alternativa a cron (*.timer)
+  \item Hora del sistema (systemd-timedated)
+  \item Contenedores (systemd-nspawn)
+  \end{itemize}
+  Además consideran que systemd es un sistema en continuo desarrollo
+\end{frame}
+
+\begin{frame}
+  \frametitle{Y algunos todavía no utilizados por todas las distros}
+  \begin{itemize}
+  \item Interfaces de red (systemd-networkd)
+  \item Chequeo del sistema de ficheros (systemd-fsck)
+  \item Resolución de nombres (systemd-resolved)
+  \item Volcados de memoria (systemd-coredump y coredumpctl)
+  \item Cuotas (systemd-quotacheck)
+  \item Homes (systemd-homed)
+  \item Y lo que te rondaré morena
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Críticas}
+  Systemd ha recibido feroces críticas:
+  \begin{itemize}
+  \item No solo sustituye init, se ha convertido en un supersistema interno que está reemplazando muchos componentes esenciales
+  \item Rompe con la filosofía UNIX de pequeñas aplicaciones que realizan muy bien una tarea interactuando entre sí
+  \item Incluye cada vez más dependencias que hacen difícil tener un sistema sin systemd
+  \item Es exclusivo de Linux y no utilizable en otros Unices
+  \item Incluso ha habido forks: \url{https://devuan.org/}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Características principales}
+  \begin{itemize}
+  \item Activación de servicios basados en sockets
+  \item Activación de servicios basados en D-Bus 
+  \item Activación de servicios basados en dispositivos
+  \item Activación de servicios basados en ficheros
+  \item Montaje y automontaje
+  \item Compatible con SysV init
+  \end{itemize}
+  \href{https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd}{Red Hat System Administrator's Guide}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Conceptos de systemd. Unidades}
+  \begin{description}
+  \item[Unidad (\textit{unit})] Elemento básico de systemd asociado a un fichero de configuración
+  \end{description}
+  La instrucción principal para interacturar con systemd es \texttt{systemctl}:
+  \begin{itemize}
+  \item Información de systemd:
+    \begin{lstlisting}
+      systemctl status
+    \end{lstlisting}
+  \item Unidades que han fallado:
+    \begin{lstlisting}
+      systemctl --failed [--all]
+    \end{lstlisting}
+  \item Listar unidades en memoria:
+    \begin{lstlisting}
+      systemctl list-units
+    \end{lstlisting}
+  \item Listar unidades instaladas:
+    \begin{lstlisting}
+      systemctl list-unit-files
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+  
+\begin{frame}
+  \frametitle{Conceptos de systemd. Unidades}
+  Las unidades se ubican en diferentes directorios:
+  \begin{itemize}
+  \item \texttt{/lib/systemd/system/} Al instalar los diferentes paquetes, estén o no habilitadas
+  \item \texttt{/run/systemd/} Creadas durante la ejecución del sistema. Tiene prioridad sobre el anterior
+  \item \texttt{/etc/systemd/system/} Unidades habilitadas
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Conceptos de systemd. Servicios}
+  Las unidades encargadas de la gestión de servicios tienen la extensión \texttt{.service} y se gestionan con \texttt{systemctl}:
+  \begin{lstlisting}
+    systemctl start foo | foo.service 
+    systemctl stop foo | foo.service 
+    systemctl restart foo | foo.service 
+    systemctl status foo | foo.service 
+    systemctl enable foo | foo.service 
+    systemctl disable foo | foo.service 
+    systemctl mask foo | foo.service 
+    systemctl unmask foo | foo.service 
+    systemctl is-enabled foo | foo.service
+    systemctl is-active foo | foo.service
+    systemctl is-failed foo | foo.service
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Conceptos de systemd. Targets}
+  \begin{description}
+  \item[\textit{Target}] Conjunto de unidades. Los niveles de ejecución se sustituyen en systemd por \textit{targets}, pero se usan con más fines. Cada distro puede definir sus propios \textit{targets}
+    \begin{itemize}
+    \item \textit{basic.target}: Unidades para el inicio del sistema
+    \item \textit{multi-user.target}: Agrupa la mayoría de los servicios no esenciales. Equivale a los niveles de ejecución 2-4
+    \item \textit{graphical.target}: Agrupa los servicios del entorno gráfico. Equivalente al nivel de ejecución 5
+    \end{itemize}
+  \end{description}
+  \begin{lstlisting}
+    systemctl get-default
+    systemctl list-units --type target [--all]
+    systemctl set-default nombre.target
+    systemctl isolate nombre.target
+    systemctl [--no-wall] rescue
+    systemctl [--no-wall] emergency
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Conceptos de systemd. Porciones}
+  \begin{description}
+  \item[Porción (\textit{slice})] Utilizado para gestionar grupos de procesos creando nodos en el árbol de Linux cgroups, por lo que se pueden aplicar límites a los recursos utilizados.
+    \begin{itemize}
+    \item \texttt{system.slice}: Utilizado por defecto por servicios
+    \item \texttt{user.slice}: Jerarquía de porciones de recursos de usuarios (los hijos se representan con \texttt{``-''})
+    \item \texttt{user-[].slice}: Sesiones de usuarios gestionadas por systemd-logind
+    \end{itemize}
+    \begin{lstlisting}
+      systemctl list-units --type slice [--all]
+    \end{lstlisting}
+  \end{description}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Conceptos de systemd. Puntos de montaje}
+  \begin{description}
+  \item [Punto de montaje (\textit{mount})] Define unidades para los puntos de montaje de los sistemas de ficheros en unidades con extensión \texttt{.mount}. Sustituye así las entradas de \texttt{/etc/fstab}, pero por compatibilidad permite definir allí las entradas que se traducen en tiempo de ejecución a unidades en \texttt{/run/systemd}
+  \item [\textit{automount}] Para montaje automático (requiere una unidad .mount y otra .automount)
+  \item[Intercambio (\textit{swap})] Define unidades para los dispositivos o ficheros de \textit{swap}. Al igual que en el caso anterior, pueden seguir definiéndose en \texttt{/etc/fstab} y se crean las correspondientes unidades durante la ejecución del sistema.
+  \end{description}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Conceptos. Temporizadores}
+  \begin{description}
+  \item[Temporizador (\textit{timer})] Como alternativas a la definición de procesos de \texttt{cron}. Hay de dos tipos:
+    \begin{itemize}
+    \item Definidos conforme a fechar fijas, como los \textit{cronjobs}
+    \item Definido por un intervalo de tiempo tras un evento.
+    \end{itemize}
+  \end{description}
+  \begin{lstlisting}
+ systemctl list-timers
+NEXT     LEFT          LAST     PASSED       UNIT               ACTIVATES
+Sun ...  3h 35min left Sun ...  10h ago      apt-daily.timer    apt-daily.service
+Mon ...  18h left      Sun ...  4h 47min ago apt-daily-upgra... apt-daily-upgrade.service
+Mon ...  22h left      Sun ...  1h 29min ago systemd-tmpfile... systemd-tmpfiles-clean.service
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Apagar/suspender/hibernar/reiniciar}
+  systemd también controla las funciones de apagado y reinicio, junto con la suspensión (guarda estado en memoria) o la hibernación (guarda el estado en disco) del sistema:
+  \begin{lstlisting}
+    systemctl [--no-wall] [-f] halt 
+    systemctl [--no-wall] [-f] poweroff 
+    systemctl [--no-wall] [-f] reboot
+    systemctl suspend
+    systemctl hibernate
+    systemctl hybrid-sleep
+  \end{lstlisting}
+  Siguen existiendo las instrucciones clásicas \texttt{poweroff}, \texttt{shutdown}, etc. dentro del paquete \texttt{systemd-sysv} pero realizan sus funciones a través de systemd.
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{timedatectl}
+  Instrucción utilizada para consultar y fijar la hora del sistema.
+  \begin{lstlisting}
+timedatectl 
+      Local time: dom 2017-12-10 12:14:57 CET
+  Universal time: dom 2017-12-10 11:14:57 UTC
+        RTC time: dom 2017-12-10 11:14:57
+       Time zone: Europe/Madrid (CET, +0100)
+ Network time on: yes
+NTP synchronized: yes
+ RTC in local TZ: no    
+  \end{lstlisting}
+  Incluye ntp integrado a través de \texttt{systemd-timesyncd.service}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{loginctl}
+  \begin{description}
+  \item[Puesto (\textit{seat})] Hardware asociado a un puesto de trabajo
+  \item[Sesión] Definida por el tiempo entre el ingreso y la salida del usuario
+  \end{description}
+  \texttt{systemd-logind} permite definir sistemas multisesión y/o multipuesto.\par
+  \texttt{loginctl} es la instrucción para controlar las sesiones, puestos y demás aspectos relacionados:
+  \begin{lstlisting}
+    loginctl list-users
+    loginctl list-seats
+    loginctl list-sessions
+    loginctl user-status [USER]
+    ...
+  \end{lstlisting}
+\end{frame}
+\end{document}
