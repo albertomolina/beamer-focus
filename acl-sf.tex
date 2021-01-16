@@ -1,0 +1,56 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}                                                                 \
+                                                                                              
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Sistemas de ficheros: Listas de control de acceso}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{acl sobre los ficheros}
+  \begin{itemize}
+  \item Permite un control adicional sobre los permisos de los ficheros
+  \item Debe estar habilitado en el sistema de ficheros
+  \item Se definen con \texttt{setfacl} del paquete \texttt{acl}
+  \item Ejemplo:
+\footnotesize{
+\begin{verbatim}
+setfacl -m ``u:usuario:rw'' fichero      
+\end{verbatim}}
+  \item Se comprueban las ACLs con \texttt{getfacl}
+  \item Cuando hay ACLs definidas se indica con un \texttt{+} al listar:
+\footnotesize{
+\begin{verbatim}
+drwxrwxr-x+  2 alberto alberto        6 ene 19 12:15 Directorio
+    \end{verbatim}}
+  \item Cuidado con el uso de ACLs o esto va a parecerse a Windows ;)
+  \end{itemize}
+\end{frame}
+\end{document}

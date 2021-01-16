@@ -1,0 +1,103 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}                                                                 \
+                                                                                              
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Linux: Sistemas de ficheros y permisos}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  Recordamos los permisos tradicionales UNIX sobre ficheros:
+  \begin{itemize}
+  \item Esquema ugoa
+  \item Permisos especiales (SUID, SGID, sticky bit)
+  \item Es una implementación de un sistema de DAC (\textit{Discretionary
+      Access Control}) ya que los usuarios pueden modificar los
+    permisos (chmod)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{En el inicio fue ugoa}
+  \begin{itemize}
+  \item Tradicionalmente en UNIX se definen los permisos de ficheros
+    para usuario (u), grupo (g), otros (o) o todos (a) 
+  \item Los tres permisos básicos son lectura (r), escritura (w) y
+    ejecución (x) 
+  \item Para borrar un fichero necesitamos permiso de escritura y
+    ejecución en el directorio padre 
+  \item Un usuario tiene un grupo principal y puede pertenecer a otros
+    grupos 
+  \item Los permisos iniciales de un fichero se definen mediante la
+    orden \texttt{umask} 
+  \item Se puede cambiar el grupo principal en una sesión con
+    \texttt{newgrp} 
+  \item Notación octal: rwx = 111, rw- = 110, etc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Permisos especiales de ficheros}
+  \begin{itemize}
+  \item Al establecer \textit{set user identification}
+    (\texttt{suid}) sobre un fichero ejecutable, este lo puede
+    ejecutar otro usuario con los permisos del propietario.
+  \item Si el propietario es superusuario puede ser arriesgado
+  \item Ficheros con bit de suid activado:
+\begin{verbatim}
+find / -perm /4000
+\end{verbatim}
+  \item Al establecer \textit{set group identification}
+    (\texttt{sgid}) sobre un fichero ejecutable, ocurre lo mismo que
+    con suid, pero ahora se aplican los permisos del grupo
+    propietario 
+  \item Ficheros con bit de sgid activado:
+\begin{verbatim}
+find / -perm /2000
+\end{verbatim}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Permisos especiales de ficheros}
+  \begin{itemize}
+  \item sgid sobre un directorio: Todos los ficheros que se creen
+    heredan el grupo propietario del directorio
+  \item suid y sgid se indican con (s)
+  \item Al activar el \textit{sticky bit} en un directorio, sólo el
+    propietario del fichero podrá borrarlo 
+  \item Utilizado en directorios donde varios usuarios pueden escribir
+    (por ejemplo /tmp) 
+  \item Muy interesante combinado con sgid
+  \item sticky bit se indica con (t)
+  \end{itemize}
+\end{frame}
+
+\end{document}

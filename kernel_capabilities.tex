@@ -1,0 +1,99 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}                                                                 \
+                                                                                              
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Linux kernel POSIX Capabilities}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Introducción}
+  \begin{itemize}
+  \item Tradicionalmente dos privilegios:
+    \begin{itemize}
+    \item Procesos privilegiados: Se saltan las comprobaciones de permisos
+    \item Procesos no privilegiados: Comprobación estricta de permisos
+    \end{itemize}
+  \item \textit{Kernel Capabilities}: Mecanismo de seguridad basado en
+    el principio de mínimo privilegio, agrupando ciertos privilegios
+    en una ``capacidad''
+  \item Se le puede asignar a un proceso una capacidad específica a
+    nivel del kérnel (\textit{kernel capability})
+  \item No son originales de linux: POSIX capabilities, detalladas en
+    el borrador (retirado) 1003.1e:
+    \footnotesize{\url{http://wt.tuxomania.net/publications/posix.1e/download.html}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Lista de capacidades}
+  \texttt{man 7 capabilities}\par
+  Algunos ejemplos:
+  \begin{itemize}
+  \item \texttt{CAP\_CHOWN}
+  \item \texttt{CAP\_KILL}
+  \item \texttt{CAP\_NET\_ADMIN}
+  \item \texttt{CAP\_NET\_BIND\_SERVICE}
+  \item \texttt{CAP\_NET\_RAW}
+  \item \texttt{CAP\_SYS\_ADMIN}
+  \item \texttt{CAP\_SYS\_MODULE}
+  \item \texttt{CAP\_SYS\_RAWIO}
+  \item \texttt{CAP\_SYS\_TIME}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Conjuntos de capacidades de un ejecutable}
+  \begin{itemize}
+  \item Se pueden definir los siguientes conjuntos de capacidades a un
+    ejecutable
+    \begin{description}
+    \item[Permitidas(p)] Automáticamente permitidas, independientemente
+      de las capacidades heredadas del proceso padre 
+    \item[Heredables(i)] Se añaden al proceso junto con las del proceso
+      padre para determinar las capacidades permitidas
+    \item[Efectivas(e)] Usadas para permitir capacidades de linux en
+      aplicaciones que no las soportan directamente
+    \end{description}
+  \end{itemize}
+  \footnotesize{\texttt{\href{http://www.andy-pearce.com/blog/posts/2013/Mar/file-capabilities-in-linux/}{Andy Pearce: File Capabilities In Linux}}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Definiendo capacidades}
+  \begin{itemize}
+  \item Se instala el paquete \texttt{libcap2-bin}
+  \item \texttt{setcap}: Define las capacidades de un fichero
+  \item \texttt{getcap}: Obtiene las capacidades de un fichero
+  \item \texttt{getpcaps}: Lista las capacidades de un proceso
+  \end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,57 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+%\usepackage[normalem]{ulem}                                                                 
+                                                                                             
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Linux: Atributos de ficheros extendidos}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Atributos extendidos de ficheros}
+  \begin{itemize}
+  \item Pares clave-valor asociados a un fichero, ordenadas en cuatro clases:
+    \begin{itemize}
+    \item security
+    \item system
+    \item trusted
+    \item user
+    \end{itemize}
+  \item Las capacidades de núcleo se guardan como atributos extendidos de seguridad
+  \item Es necesario que el sistema de ficheros incluya soporte para xattrs
+  \item Los programas para utilizar xattrs se incluyen en el paquete \texttt{attr}
+  \item La clase ``user'' permite almacenar cualquier información asociada al fichero:
+    \begin{lstlisting}
+setfattr -n user.checksum -v "3baf9ebce4c664ca8d9e5f6aaafb47fb" \
+fichero
+    \end{lstlisting}
+  \end{itemize}
+\end{frame}
+
+\end{document}
