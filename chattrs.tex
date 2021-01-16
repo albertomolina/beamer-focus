@@ -1,0 +1,78 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+% \usepackage[normalem]{ulem}
+
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{Atributos de ficheros}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Atributos de ficheros}
+  \begin{itemize}
+  \item Asociados inicialmente a ext?, parcialmente soportados por otros sistemas de ficheros (btrfs, xfs, etc.)
+  \end{itemize}
+  \begin{columns}
+    \column{0.35\textwidth}
+    \begin{itemize}
+    \item a: append only
+    \item c: compressed
+    \item d: no dump
+    \item e: extent format
+    \item i: immutable
+    \item j: data journalling
+    \item s: secure deletion
+    \end{itemize}
+    \column{0.45\textwidth}
+    \begin{itemize}
+    \item t: no tail-merging
+    \item u: undeletable
+    \item A: no atime updates
+    \item C: no copy on write
+    \item D: synchronous directory updates
+    \item S: synchronous updates
+    \item T: top of directory hierarchy
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Usar atributos de ficheros}
+  \begin{itemize}
+  \item Se establecen o modifican los atributos de ficheros con \texttt{chattr}, por ejemplo:
+    \begin{lstlisting}
+chattr +u fichero
+    \end{lstlisting}
+  \item Se comprueban los atributos que están definidos con \texttt{lsattr}
+  \item Ambos programas se incluyen en el paquete \texttt{e2fsprogs}
+  \item Algunos atributos hay que establecerlos como root o con la capacidad de núcleo correspondiente
+  \end{itemize}
+\end{frame}
+
+\end{document}
