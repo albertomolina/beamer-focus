@@ -1,0 +1,290 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+% \usepackage[normalem]{ulem}                                                                 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes\\
+José Domingo Muñoz Rodríguez}
+\title{Ansible}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \begin{Large}
+  \begin{center}
+    Introducción    
+  \end{center}    
+  \end{Large}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Despliegue tradicional en un servidor}
+  \begin{itemize}
+  \item Aprovisionamiento del servidor:
+    \begin{itemize}
+    \item Comprar el servidor o crear la máquina virtual
+    \item Instalar y configurar el SO
+    \item Instalar y configurar los servicios
+    \item Configurar la seguridad
+    \end{itemize}
+  \item Despliegue de aplicaciones
+  \item Documentar todo es la clave
+  \item Misma configuración utilizada por años
+  \item Escalado vertical, que implica paradas del servidor
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Despliegue ``moderno'' de un servidor}
+  \begin{itemize}
+  \item Aprovisionamiento de una máquina virtual o contenedor desde una imagen o plantilla
+  \item Uso de herramientas de gestión de la configuración:
+    \begin{itemize}
+    \item Configuración del SO
+    \item Instalación y configuración de servicios
+    \item Configuración de la seguridad
+    \item Actualizaciones
+    \end{itemize}
+  \item Despliegue de aplicaciones desde un entorno de pruebas idéntico al de producción
+  \item Idealmente se utiliza escalado horizontal
+  \item Los servidores no tienen por qué mantener la misma configuración mucho tiempo
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cambio de paradigma: Infraestructura como código}
+  Usa tu infraestructura como el software que es:
+  \begin{itemize}
+  \item Utiliza software de control de versiones
+  \item Utiliza un buen editor de textos
+  \item Todo legible y con comentarios
+  \item Utiliza software de orquestación y de gestión de la configuración
+  \item Devops
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Software de orquestación}
+  \begin{itemize}
+  \item Utilizado para crear escenarios completos con múltiples servidores o contenedores (aprovisionamiento de recursos)
+  \item Muy útil en demanda variable de recursos
+  \item Muy útil en entornos en los que se cambia continuamente la configuración
+  \item Puede incluir funcionalidad de autoescalado
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Software de gestión de la configuración (CMS)}
+  Proporciona la gestión y configuración de:
+  \begin{itemize}
+  \item Aprovisionamiento
+  \item Instalación
+  \item Configuración
+  \item Actualizaciones
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{Large}
+    \begin{center}
+      CMS de software libre
+    \end{center}
+  \end{Large}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Idempotencia}
+  \begin{quote}
+    Propiedad de ciertas operaciones matemáticas que pueden aplicarse múltiples veces, cambiando el resultado sólo la primera vez
+  \end{quote}
+  \begin{itemize}
+  \item Se utiliza en este ámbito para indicar la diferencia entre los CMS y otras opciones de configuración automátia
+  \item Una receta de un CMS se puede ejecutar múltiples veces y el resultado tiene que ser el siempre el mismo
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Puppet}
+  \begin{itemize}
+  \item Desarrollado por Puppet Labs: \href{https://puppet.com/}{puppet.com}
+  \item Escrito en \texttt{C++} y Clojure
+  \item Primera versión: 2005
+  \item Arquitectura cliente-servidor: Agente en los clientes y servidor con las configuraciones
+  \item Los clientes comprueban cada cierto tiempo si es necesario aplicar cambios y en caso necesario los aplican
+  \item Configuración mediante manifiestos (manifests) con sintaxis propia
+  \item Muchos manifiestos disponibles (Forja de puppet): \href{https://forge.puppet.com/}{forge.puppet.com}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Chef}
+\begin{itemize}
+\item Desarrollado por Chef (antes OpsCode): \href{https://www.chef.io/}{chef.io}
+\item Escrito en ruby
+\item Primera versión: 2009
+\item Arquitectura pull: Chef server, chef client y workstation
+\item Los clientes comprueban cada cierto tiempo si es necesario aplicar cambios y en caso necesario los aplican
+\item Configuración mediante recetas (recipes) y libros de recetas (cookbooks) en ruby
+\item Muchos libros de recetas disponibles (chef supermarket): \href{https://supermarket.chef.io/}{supermarket.chef.io}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SaltStack (Salt)}
+  \begin{itemize}
+  \item Desarrollado por SaltStack: \href{https://saltstack.com/}{saltstack.com}
+  \item Escrito en Python
+  \item Primera versión: 2011
+  \item Master y minions
+  \item Descripción de recursos en YAML
+  \item Incluye monitorización para respuesta a eventos
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Ansible}
+  \begin{itemize}
+  \item Desarrollado principalmente por Red Hat (antes ansible): \href{https://www.ansible.com/}{www.ansible.com}
+  \item Escrito en Python
+  \item Primera versión: 2012
+  \item Arquitectura push
+  \item No utiliza ningún agente: ssh
+  \item Jugadas (plays) y libros de jugadas (playbooks) en YAML
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{¿Por qué ansible?}
+  \begin{itemize}
+  \item Cualquier CMS es una buena opción
+  \item Salt y Ansible son más sencillos de aprender y la sintaxis es conocida (YAML)
+  \item Ansible no utiliza agentes, sólo ssh (!)
+  \item Fácil de instalar (disponible en pypi)
+  \item Comunidad muy activa
+  \item Más cercano a la forma de trabajar de administradores de sistemas
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{Large}
+    \begin{center}
+      Ansible
+    \end{center}
+  \end{Large}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Instalación}
+  \begin{itemize}
+  \item \href{https://docs.ansible.com/ansible/latest/installation\_guide/intro_installation.html}{Installing Ansible}
+  \item Está empaquetado para varias distros:
+    \begin{itemize}
+    \item \href{https://tracker.debian.org/pkg/ansible}{tracker.debian.org/pkg/ansible}
+    \item \href{https://packages.ubuntu.com/ansible}{packages.ubuntu.com/ansible}
+    \end{itemize}
+  \item Es muy sencillo hacerlo en un entorno virtual de python con pip
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Configuración}
+  \begin{itemize}
+  \item Puede definirse en diferentes ubicaciones, con la siguiente orden de prioridades:
+    \begin{itemize}
+    \item \texttt{ANSIBLE\_CONFIG} (variable de entorno)
+    \item \texttt{ansible.cfg} (directorio actual)
+    \item \texttt{.ansible.cfg} (en el directorio home)      
+    \item \texttt{/etc/ansible/ansible.cfg}
+    \end{itemize}
+  \item \textbf{Recomendación:} Un repositorio git por configuración con su \texttt{ansible.cfg}
+  \item ¿Qué podemos definir aquí? \href{https://docs.ansible.com/ansible/latest/installation\_guide/intro_configuration.html}{Configuring Ansible}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Configuración}
+  Ejemplo de configuración:
+\begin{verbatim}
+[defaults]
+inventory = ansible_inventory.ini
+remote_user = debian
+private_key_file = /home/user/.ssh/private_key
+host_key_checking = False
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Plugins y módulos}
+  \begin{itemize}
+  \item Se pueden ejecutar directamente o configurándolos en libros de jugadas (\textit{playbooks})
+  \item Cada módulo puede recibir parámetros (obligatorios u opcionales)
+  \item Ansible evoluciona rápido: Módulos o su formato pasa a estar obsoleto
+  \item Incluídos directamente (\textit{built-in}) o adicionales a través de \href{https://galaxy.ansible.com/}{Ansible Galaxy}
+  \item \href{https://docs.ansible.com/ansible/latest/collections/all_plugins.html}{Indexes of all modules and plugins}
+  \item Un ejemplo:
+\begin{verbatim}
+ansible controller -m user -a "name=alberto group=adm"
+\end{verbatim}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Libros de jugadas (\textit{playbooks})}
+  \begin{itemize}
+  \item Los libros de jugadas agrupan jugadas (\textit{plays})
+  \item Cada jugada contiene una o varias tareas (y otros elementos)
+  \item Las tareas utilizan módulos
+  \item Se ejecutan secuencialmente
+  \item Están escritos en YAML
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+  \item Ansible es fácil de aprender: aprende practicando
+  \item Instálalo, configura un fichero de inventario y practica
+  \item Empieza con tareas sencillas y módulos
+  \item Cuando te familiarices con esos elementos, continúa:
+    \begin{itemize}
+    \item Manejadores (\textit{handlers})
+    \item Variables: Host, Group, facts, \ldots
+    \item Ejecución condicionada
+    \item Bucles
+    \item Roles
+    \item Buenas prácticas y reutilización
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+\end{document}
