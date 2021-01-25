@@ -1,0 +1,116 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+% \usepackage[normalem]{ulem}                                                                                                                                
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes\\                                                                                                                            
+José Domingo Muñoz Rodríguez}
+\title{LXC}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Virtualización ligera o por contenedores}
+  \begin{itemize}
+  \item Común en sistemas Solaris o FreeBSD desde hace años
+  \item Todas las máquinas virtuales utilizan el kérnel del anfitrión
+  \item Linux: OpenVZ, vserver, ... Importantes limitaciones
+  \item Desarrollo en Linux de espacios de nombres (\textit{namespaces}), grupos de control (cgroups), etc. permite crear sistemas de contenedores para linux: lxc, systemd-nspawn
+  \end{itemize}
+\end{frame}
+\begin{frame}
+  \frametitle{Características principales}
+  \begin{itemize}
+  \item Sustituye a sistemas anteriores como OpenVZ o Linux vservers
+  \item Importantes mejoras al usar
+    \begin{itemize}
+    \item Espacios de nombres del kérnel 
+    \item Apparmor y SELinux
+    \item Chroots (pivot\_root)
+    \item Kernel capabilities
+    \item CGroups
+    \end{itemize}
+  \item Totalmente integrado en el kérnel linux
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Proyecto LXC}
+  \begin{itemize}
+  \item Comienza el desarrollo en 2008
+  \item Licencia LGPL
+  \item Desarrollado principalmente por Canonical
+  \item Lenguaje C
+  \item \url{http://linuxcontainers.org}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Instalación}
+  No hay binarios raros, instalaciones en \texttt{/opt} o \texttt{install.sh}, simplemente:
+\begin{verbatim}
+apt install lxc
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Uso de LXC}
+  \begin{itemize}
+  \item Pertenece a los denominados contenedores de sistemas
+  \item Gestiona contenedores directamente sin ``adornos'' y a bajo nivel
+  \item Los contenedores de aplicaciones: docker, rkt, \ldots están pensados para el despliegue de aplicaciones en arquitectura de microservicios
+  \item No compite con docker sino con otros sistemas de virtualización
+  \item No hay nuevos conceptos, es otro sistema de virtualización en la que todos los contenedores tienen el mismo kérnel
+  \item Utiliza pivot root para definir el directorio raíz del contenedor en un directorio
+  \item No hay que definir un LXCFile ni nada que se parezca ;)
+  \item Para acceder al contenedor utilizamos ssh(!)
+  \item LXD: LXC + demonio + CLI unificado + imágenes
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Integración}
+  \texttt{LXC} no sólo se utiliza desde línea de comandos, se puede integrar con:
+  \begin{itemize}
+  \item Libvirt
+  \item OpenStack
+  \item Opennebula
+  \item Vagrant
+  \item \ldots
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Manos a la obra}
+  ¿Comenzamos? Esto se aprende haciendo
+\end{frame}
+\end{document}
