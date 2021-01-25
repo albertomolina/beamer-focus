@@ -1,0 +1,180 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+% \usepackage[normalem]{ulem}                                                                                                                                
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes\\
+José Domingo Muñoz Rodríguez}
+\title{Contenedores y apliaciones}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{\today}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Contenedores}
+  \begin{itemize}
+  \item Contenedores
+  \item ¿Para qué sirve un sistema operativo?¿Qué es un proceso?
+  \item Compartir o no compartir, ésa es la cuestión: .so., dependencias
+  \item ¿Qué es un contenedor y para qué se utiliza?
+  \item Precedentes en linux:
+    \begin{itemize}
+    \item chroot
+    \item OpenVZ
+    \item Linux vservers
+    \end{itemize}
+  \item Precedentes en otros sistemas operativos: FreeBSD Jails, Solaris Zones, etc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Contenedores}
+  \begin{itemize}
+  \item El gran hito: inclusión de cgroups y namespaces en el kérnel linux (a partir de 2007)
+  \item cgroups (límite de memoria, cpu, I/O o red para un proceso y sus hijos)
+    \url{https://wiki.archlinux.org/index.php/Cgroups}
+  \item cgroupsv2 (rootless containers)
+    \url{https://medium.com/nttlabs/cgroup-v2-596d035be4d7}
+  \item namespaces: proporcionan un punto de vista diferente a un proceso (interfaces de red, procesos, usuarios, etc.)
+    \url{http://laurel.datsi.fi.upm.es/~ssoo/SOA/namespaces.html}
+  \item Todo esto unido a la expansión de linux en el centro de datos ha provocado la explosión en el uso de contenedores de los últimos años
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Despliegue de aplicaciones}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Aplicación monolítica}
+  \begin{itemize}
+  \item Todos los componentes en el mismo nodo
+  \item Escalado vertical
+  \item Arquitectura muy sencilla
+  \item Suele utilizarse un solo lenguaje (o un conjunto pequeño de ellos)
+  \item No pueden utilizarse diferentes versiones de un lenguaje a la vez
+  \item Interferencias entre componentes en producción
+  \item Complejidad en las actualizaciones. Puede ocasionar paradas en producción
+  \item Normalmente usan infraestructura estática y fija por años
+  \item Típicamente la aplicación no es tolerante a fallos
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Aplicación distribuida}
+  \begin{itemize}
+  \item Idealmente un componente por nodo
+  \item Escalado horizontal
+  \item Arquitectura más compleja
+  \item Menos interferencias entre componentes
+  \item Mayor simplicidad en las actualizaciones
+  \item Diferentes enfoques no excluyentes: SOA, cloud native, microservicios, \ldots
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SOA}
+  \begin{itemize}
+  \item SOA: Service Oriented Architecture
+  \item Servicios independientes
+  \item Múltiples tecnologías, lenguajes y/o versiones interactuando
+  \item Comunicación vía SOAP
+  \item Uso de XML, XSD y WSDL
+  \item Colas de mensajes
+  \item Se relaciona con aplicaciones corporativas
+  \item Se le achaca mucha complejidad y no ha terminado de extenderse
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Cloud Native Application}
+  \begin{itemize}
+  \item Énfasis en la adaptación de la infraestructura a la demanda
+  \item Uso extensivo de la elasticidad: Infraestructura dinámica
+  \item Aplicaciones resilientes
+  \item Elasticidad horizontal
+  \item Automatización
+  \item Puede ser complejo de implementar en una aplicación
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Aplicación con o sin estado}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{block}{Aplicaciones con estado}
+      \begin{itemize}
+      \item La operación se realiza en un contexto de un estado anterior
+      \item Típicamente requerirá que se interactúe con el mismo servidor
+      \item Suelen hacer uso de algún tipo de almacenamiento permanente
+      \item Para escalar se pueden utilizar clusters de alta disponibilidad
+      \end{itemize}
+      Ejemplo: Webmail
+    \end{block}
+    \column{0.5\textwidth}
+    \begin{block}{Aplicaciones sin estado}
+      \begin{itemize}
+      \item Cada operación independiente de las anteriores o posteriores
+      \item Puede interactuar cada vez con un servidor diferente
+      \item No necesita almacenamiento permanente o solo de lectura
+      \item Para escalar puede utilizar clusters de balanceo de carga
+      \end{itemize}
+      Ejemplo: Buscador de Internet
+    \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Microservicios}
+  \begin{itemize}
+  \item Deriva del esquema SOA
+  \item No existe una definición formal, ni WSDL, XSD, etc. Solución más pragmática
+  \item Servicios llevados a la mínima expresión (idealmente un proceso por nodo): Microservicios
+  \item Comunicación vía HTTP REST y colas de mensajes, ¿gRPC?
+  \item Relacionado con procesos ágiles de desarrollo, facilita enormemente la actualizaciones de
+    versiones, llegando incluso a la entrega continua o despliegue continuo.
+  \item Suele implementarse sobre contenedores
+  \item Muy adecuada para aplicaciones sin estado
+  \item Aumento de la latencia entre componentes
+  \item Puede utilizar características de “cloud native application”
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Microservicios. Ejemplo}
+  OpenStack
+  \begin{itemize}
+  \item Cada componente es un microservicio que puede ejecutarse en un nodo independiente
+  \item kolla-ansible: Despliegue de OpenStack con ansible en múltiples contenedores docker
+  \end{itemize}
+  \url{https://elatov.github.io/2018/01/openstack-ansible-and-kolla-on-ubuntu-1604/}
+\end{frame}
+\end{document}
