@@ -1,0 +1,157 @@
+\documentclass[aspectratio=169]{beamer}
+\include{cabecera-focus}
+
+\usepackage{colortbl}
+\usepackage{color}
+\usepackage{pifont}
+\usepackage{soul}
+%\usepackage[normalem]{ulem}
+
+\usepackage{listings}
+
+\parskip=12pt
+
+\lstset{basicstyle=\normalsize,
+aboveskip=5pt,
+basicstyle=\small\ttfamily,
+belowskip=5pt
+}
+
+\author{Alberto Molina Coballes}
+\title{La Administración de Sistemas ha muerto ¡Viva la Administración de Sistemas!}
+\institute{IES Gonzalo Nazareno}
+\titlegraphic{\includegraphics[width=1.5cm]{cc_by_sa.png}}
+\logo{\includegraphics[width=.75cm]{logo_iesgn.png}}
+\date{29 de noviembre de 2019}
+
+\definecolor{verde}{rgb}{0,0.73,0}
+
+\begin{document}
+\def\braces#1{[#1]}
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Un día recibimos una llamada ...}
+  \begin{center}
+    \includegraphics[width=.6\textwidth]{img/Vintage-Telephone-Silhouette.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{¿Qué es un administrador de sistemas?}
+  Se encarga de:
+  \begin{itemize}
+  \item Mantener las aplicaciones funcionando de forma segura
+  \item Controlar los datos
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Roles}
+  Las funciones se concretan en diferentes roles clásicos:
+  \begin{itemize}
+  \item Administrador Sistemas Operativos
+  \item Administrador de Servicios: Correo, Web, etc.
+  \item Gestor del Hardware
+  \item Administrador de Redes
+  \item Encargado de la Seguridad
+  \item Administrador de Bases de datos
+  \item Administrador del Almacenamiento
+  \item Administrador de la Virtualización (hipervisores)
+  \end{itemize}
+  Roles mejor o peor cubiertos actualmente por la normativa de ASIR
+\end{frame}
+
+{
+\usebackgroundtemplate{\centering{\includegraphics[width=.97\paperwidth]{img/800px-Cartoon_cloud.png}}}
+\begin{frame}
+  \frametitle{La nube}
+  ``Como las aplicaciones se ejecutan en la nube de forma segura y los
+  datos están en la nube, no necesitamos que nadie se encargue de esos
+  datos ni de esas aplicaciones.''
+\end{frame}
+}
+
+\begin{frame}
+  \frametitle{¿Realmente todo va a estar en la nube?}
+  Se estima que el 83\% de la carga de trabajo empresarial en el 2020 estará en la nube:
+  \begin{itemize}
+  \item 41\% en nube pública (AWS, GCP, Azure, etc.)
+  \item 20\% en nube privada
+  \item 22\% en nube híbrida
+  \end{itemize}
+  \href{https://www.forbes.com/sites/louiscolumbus/2018/01/07/83-of-enterprise-workloads-will-be-in-the-cloud-by-202\
+0/}{Forbes: 83\% Of Enterprise Workloads Will Be In The Cloud By 2020}
+\end{frame}
+
+\begin{frame}
+  \frametitle{¿En qué nube?}
+  Dos situaciones muy diferentes:
+  \begin{itemize}
+  \item Una empresa decide dejar de gestionar su correo electrónico y
+    contrata Google Suite (SaaS)
+  \item Una empresa decide dejar de alojar localmente sus servidores
+    de correo y mueve sus servidores de correo a AWS (IaaS)
+  \end{itemize}
+  La persona encargada del correo en cada situación tiene roles muy diferentes.
+\end{frame}
+
+\begin{frame}
+  \frametitle{¿Ha muerto la Administración de Sistemas?}
+  \begin{itemize}
+  \item Se supone que determinadas tareas serán cada vez menos frecuentes:
+    \begin{itemize}
+    \item Mantenimiento de los sistemas operativos y aplicaciones locales
+    \item Instalación y configuración de aplicaciones en redes locales
+    \item Gestión local del almacenamiento
+    \end{itemize}
+  \item Ciertos roles se convertirán en nichos, no desaparecerán
+  \item Siempre hará falta un Administrador de Sistemas clásico al que preguntar
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{¡Viva la Administración de Sistemas!}
+  \begin{itemize}
+  \item No ha muerto, ha evolucionado
+  \item Sería necesario que nos adaptásemos
+  \item ¿Se va a adaptar la normativa?
+  \item ¿Vamos a recibir formación?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Nuevas oportunidades}
+  \begin{itemize}
+  \item Administración de la infraestructura en nube
+  \item Arquitectura de las aplicaciones
+  \item Despliegue y actualización de aplicaciones en nube
+  \item Configuración automática de las aplicaciones
+  \item Gestión del almacenamiento
+  \item Contenedores. Un mundo enorme
+  \item Seguridad
+  \item ...
+  \end{itemize}
+Hay más oportunidades que nunca
+\end{frame}
+
+\begin{frame}
+  \frametitle{Trabajar en la nube}
+  \begin{itemize}
+  \item ¿Por qué no trabajar para las empresas de la nube?
+  \item Cada vez será más frecuente trabajar en remoto
+  \item Oportunidades para trabajar para organizaciones o empresas internacionales
+  \item ¿Estamos formando para esos roles?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{}
+  \begin{center}
+    ``Mientras haya sistemas habrá Administradores de Sistemas''
+  \end{center}
+\end{frame}
+\end{document}
